@@ -1,7 +1,11 @@
 import { useState } from "react";
+import "./menu.css"
+
 export default function Menu(){
+    const [message, setMessage] = useState('Welcome to Beau Café')
     const [coffees, setCoffees] = useState()
     const getCoffees = (temp) => {
+        setMessage(`Loading...`)
         fetch(`https://api.sampleapis.com/coffee/${temp}`)
         .then(res => res.json())
         //.then(data => setCoffees(data)) same as below** you are returning res.json() and naming it data and passing it through setCoffees
@@ -15,12 +19,16 @@ export default function Menu(){
                 <button onClick={() => getCoffees('iced')}>Iced Coffees</button>
             </div>
             {!coffees
-                ? <h2>Welcome to the Beau Café</h2>
-                : <ul>
+                ? <h2>{message}</h2>
+                : <section className="coffee-container">
                     {coffees.map( coffee => (
-                        <li key={coffee.id}>{coffee.title}</li>
+                        <div key={coffee.id} className="coffee-card">
+                            <img src={coffee.image} alt={coffee.title} />
+                            <h3> {coffee.title}</h3>
+                            <p>{coffee.description}</p>
+                        </div>
                     ) )}
-                </ul>
+                </section>
             }
         </ article>
     );
